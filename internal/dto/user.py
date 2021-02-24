@@ -1,0 +1,2 @@
+class UserForRead:
+    pass
