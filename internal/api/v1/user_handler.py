@@ -15,8 +15,8 @@ ns = api_v1.namespace('user', description='Operations related to User.')
 class User(Resource):
     @api_v1.marshal_with(user)
     def get(self, id):
-        # print(id)
-        res = UserService.get_user("ylShf5uYmmFFypbU/LZPX8xdhHnp8a94GgvQi8jmUzg=")
+
+        res = UserService.get_user(id)
         return res
 
 
