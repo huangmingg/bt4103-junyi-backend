@@ -2,9 +2,9 @@
 RESTful API web server designed using flask framework
 
 ## Prerequiste
-Python 3.7
-Anaconda
-PostgreSQL >= version 13.0.0
+- Python 3.7
+- Anaconda (for setting up of VE)
+- PostgreSQL >= 13.1
 
 
 ## Installation guide
