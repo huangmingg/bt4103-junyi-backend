@@ -1,6 +1,7 @@
 # bt4103-junyi-backend
- 
-## prerequiste
+RESTful API web server designed using flask framework
+
+## Prerequiste
 Python 3.7
 Anaconda
 PostgreSQL >= version 13.0.0
