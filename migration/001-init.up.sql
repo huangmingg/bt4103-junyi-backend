@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS logs (
     "is_downgrade"                      BOOLEAN,
     "is_upgrade"                        BOOLEAN,
     "user_level"                        SMALLINT NOT NULL,
+    "batch"                             SMALLINT,
     "created_by"                        VARCHAR NOT NULL,
     "created_at"                        TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_by"                        VARCHAR NULL,
