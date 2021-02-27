@@ -7,7 +7,7 @@ from internal.services.user_service import UserService
 
 log = logging.getLogger(__name__)
 
-ns = api_v1.namespace('lesson', description='Operations related to Lesson.')
+ns = api_v1.namespace('group', description='Operations related to group.')
 
 
 # @ns.route('/<id>')
