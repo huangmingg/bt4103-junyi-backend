@@ -2,6 +2,7 @@ from flask import Flask, Blueprint
 from flask_cors import CORS
 from internal.api.v1.v1 import api_v1
 from internal.api.v1.user_handler import ns as user_ns
+from internal.api.v1.group_handler import ns as group_ns
 from internal.db.db import db_instance
 from internal.migration.migration import migrate_database
 import os
@@ -22,6 +23,7 @@ def setup_routing(app):
     blueprint = Blueprint('v1', __name__, url_prefix='/v1')
     api_v1.init_app(blueprint)
     api_v1.add_namespace(user_ns)
+    api_v1.add_namespace(group_ns)
     app.register_blueprint(blueprint)
 
 
