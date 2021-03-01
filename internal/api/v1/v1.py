@@ -25,26 +25,3 @@ def default_error_handler(e):
     log.exception(message, e)
     return {"message": message}, 500
 
-
-basic_response = api_v1.model('basic', {
-    'response_code': fields.String(required=True),
-    'message': fields.String()
-})
-
-
-user = api_v1.model('user', {
-    'id': fields.String(required=True),
-    'name': fields.String(required=True),
-    'gender': fields.String(),
-    'points': fields.Integer(),
-    'badges_cnt': fields.Integer(),
-    'first_login_date_TW': fields.Date(),
-    'user_grade': fields.Integer(),
-    'user_city': fields.String(),
-    'is_self_coach': fields.Boolean(),
-    'belongs_to_class_cnt': fields.Integer(),
-    'has_class_cnt': fields.Integer(),
-    'has_teacher_cnt': fields.Integer(),
-    'has_student_cnt': fields.Integer()
-})
-
