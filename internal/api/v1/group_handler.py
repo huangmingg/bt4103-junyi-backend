@@ -1,46 +1,30 @@
 from flask import request
 from flask_restplus import Resource
-
 import logging
-from internal.api.v1.v1 import api_v1, user
-from internal.services.user_service import UserService
+from internal.api.v1.v1 import api_v1
+from internal.dto.groups import group_read, group_create
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 ns = api_v1.namespace('group', description='Operations related to group.')
 
 
-# @ns.route('/<id>')
-# @ns.param('id', 'uuid')
-# class User(Resource):
-#     @api_v1.marshal_with(user)
-#     def get(self, id):
-#
-#         res = UserService.get_user(id)
-#         return res
-#
-#
-# @ns.route('/')
-# class UserList(Resource):
-#     @api_v1.marshal_with(user)
-#     def get(self):
-#         res = UserService.get_users()
-#         return res
-
-
-
-
-
-
 @ns.route('/')
-class Class(Resource):
+class Group(Resource):
+    @ns.expect(group_create)
+    @ns.marshal_with(group_create)
     def post(self):
+        print(api_v1.payload)
         pass
 
-
-    @ns.route('/')
+    @ns.marshal_with(group_read)
     def get(self):
         pass
 
 
-    # @ns.route(/)
+@ns.route('/<id>')
+@ns.param('id', 'group_id')
+class GroupList(Resource):
+    @api_v1.marshal_with(group_create)
+    def get(self):
+        pass
