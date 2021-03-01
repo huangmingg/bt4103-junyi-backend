@@ -3,6 +3,8 @@ from os.path import isfile, join
 import re
 import logging
 
+logger = logging.getLogger(__name__)
+
 MIGRATION_TABLE_QUERY = """
 	CREATE TABLE IF NOT EXISTS migration_metadata (
 		"name" VARCHAR NOT NULL PRIMARY KEY
@@ -65,7 +67,7 @@ def init_metadata_table(db_instance):
 def _migrate_up(db_instance, migrated_files, migration_files):
     for n, p in migration_files:
         if n not in migrated_files:
-            print(f"executing migrating {n}")
+            logger.info(f"executing migrating {n}")
             _execute_migration_file(db_instance, p)
             query = f"INSERT INTO migration_metadata VALUES ('{n}');"
             res = db_instance.exec_transaction(query)
@@ -81,7 +83,6 @@ def _migrate_down(db_instance, migrated_files, migration_files):
 def _execute_migration_file(db_instance, file_path):
     with open(file_path, 'r') as migration_file:
         sql = migration_file.read()
-        # print(sql)
         res = db_instance.exec_transaction(sql)
         if not res:
             logging.error(f"Failed to migrate file {file_path}")
