@@ -40,7 +40,6 @@ class PostgreSqlBase:
             cur = conn.cursor()
             cur.execute(query, params)
             row = cur.fetchone()
-            print(row)
             if row:
                 col_names = map(lambda item: item[0], cur.description)
                 data = dict(zip(col_names, row))
