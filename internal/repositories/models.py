@@ -1,39 +1,38 @@
-import datetime
-from sqlalchemy import Column, DateTime, Integer, Text, Date, Boolean
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
-
-
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Text(), primary_key=True)
-    name = Column(Text(), nullable=False)
-    gender = Column(Text(), nullable=True)
-    points = Column(Integer(), nullable=False)
-    badges_cnt = Column(Integer(), nullable=False)
-    first_login_date_TW = Column(Date(), nullable=False)
-    user_grade = Column(Integer(), nullable=False)
-    user_city = Column(Text(), nullable=True)
-    is_self_coach = Column(Boolean(), nullable=False)
-    belongs_to_class_cnt = Column(Integer(), nullable=False)
-    has_class_cnt = Column(Integer(), nullable=False)
-    has_teacher_cnt = Column(Integer(), nullable=False)
-    has_student_cnt = Column(Integer(), nullable=False)
-    created_by = Column(Text(), nullable=False)
-    created_at = Column(DateTime(), nullable=False, default=datetime.datetime.utcnow)
-    created_from = Column(Text(), nullable=False)
-    updated_by = Column(Text(), nullable=False)
-    updated_at = Column(DateTime(), nullable=False, default=datetime.datetime.utcnow)
-    updated_from = Column(Text(), nullable=False)
-    deleted_by = Column(Text(), nullable=True)
-    deleted_at = Column(DateTime(), nullable=True)
+def parse(fields, raw):
+    output = {}
+    for i in fields:
+        output[i] = str(raw[i])
+    return output
 
 
-class Content:
-    pass
+class Model:
+    fields = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by', 'updated_by', 'deleted_by']
 
 
-class Log:
-    pass
+class User:
+    fields = ['id',
+              'name',
+              'gender',
+              'points',
+              'badges_cnt',
+              'first_login_date_TW',
+              'user_grade',
+              'user_city',
+              'is_self_coach',
+              'belongs_to_class_cnt',
+              'has_class_cnt',
+              'has_teacher_cnt',
+              'has_student_cnt']
 
+
+class UserCache:
+    fields = ['uuid',
+              'problems_attempted',
+              'exercises_attempted',
+              'avg_time_per_exercise',
+              'avg_accuracy',
+              'no_downgrades',
+              'no_upgrades',
+              'avg_hint_per_attempt',
+              'avg_time_btw_problem'
+              ]
