@@ -15,6 +15,7 @@ def get_users_cache():
 
 
 def get_users_cache(user_list):
+    user_list = ', '.join([f"({i})" for i in user_list])
     res = db_instance.fetch_rows(f"SELECT * FROM computed_cache WHERE uuid in ({user_list}) AND deleted_at IS NULL")
     res = [parse(UserCache.fields, row) for row in res]
     return res
