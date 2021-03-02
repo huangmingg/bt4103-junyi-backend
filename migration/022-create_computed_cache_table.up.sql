@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS computed_cache
     "exercises_attempted"   SMALLINT,
     "avg_time_per_exercise" DECIMAL,
     "avg_accuracy"          DECIMAL,
-    "no_upgrades"           SMALLINT,
     "no_downgrades"         SMALLINT,
+    "no_upgrades"           SMALLINT,
     "avg_hint_per_attempt"  DECIMAL,
     "avg_time_btw_problem"  DECIMAL,
     "created_by"            VARCHAR NOT NULL,
@@ -16,5 +16,5 @@ CREATE TABLE IF NOT EXISTS computed_cache
     "updated_at"            TIMESTAMPTZ DEFAULT now(),
     "deleted_by"            VARCHAR NULL,
     "deleted_at"            TIMESTAMPTZ NULL,
-    CONSTRAINT fk_users FOREIGN KEY (uuid) REFERENCES users(id),
+    CONSTRAINT fk_users FOREIGN KEY (uuid) REFERENCES users(id)
 );
