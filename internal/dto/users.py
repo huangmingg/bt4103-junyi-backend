@@ -18,7 +18,14 @@ user_read = api_v1.model('user_read', {
 })
 
 
-user_statistics = api_v1.inherit('user_statistics', user_read, {
-    'average_time': fields.String(),
-    'average_problem_length': fields.Decimal()
+user_statistics_read = api_v1.inherit('user_statistics_read', user_read, {
+    'uuid': fields.Integer(),
+    'problems_attempted': fields.Integer(),
+    'exercises_attempted': fields.Integer(),
+    'avg_time_per_exercise': fields.Decimal(),
+    'avg_accuracy': fields.Decimal(),
+    'no_upgrades': fields.Integer(),
+    'no_downgrades': fields.Integer(),
+    'avg_hint_per_attempt': fields.Decimal(),
+    'avg_time_btw_problem': fields.Decimal(),
 })
