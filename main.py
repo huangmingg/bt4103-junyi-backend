@@ -6,7 +6,6 @@ from internal.api.v1.group_handler import ns as group_ns
 from internal.db.db import db_instance
 from internal.migration.migration import migrate_database
 import os
-from internal.repositories.user_repo import get_users
 
 app_directory = os.getcwd()
 
