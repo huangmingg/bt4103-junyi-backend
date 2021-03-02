@@ -3,13 +3,14 @@ from internal.db.db import db_instance
 
 def create_group(name):
     pic = 'e0309575@u.nus.edu'
-    query = f'''
+    query = f"""
     INSERT INTO groups 
     (name, created_by, created_at, updated_by, updated_at) 
     VALUES 
-    ({name}, {pic}, NOW(), {pic}, NOW())
-    '''
-    res = db_instance.exec_transaction(query)
+    ('{name}', '{pic}', NOW(), '{pic}', NOW())
+    RETURNING id
+    """
+    res = db_instance.exec_transaction(query, has_return=True)
     return res
 
 
