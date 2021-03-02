@@ -70,13 +70,17 @@ class PostgreSqlBase:
             if conn:
                 self._pool.putconn(conn)
 
-    def exec_transaction(self, query, param={}):
+    def exec_transaction(self, query, param={}, has_return=False):
         conn = self._get_alive_connection()
         try:
             cur = conn.cursor()
             cur.execute(query, param)
             conn.commit()
-            return True
+            if not has_return:
+                return True
+            else:
+                rows = cur.fetchall()
+                return rows
         except Exception as e:
             raise Exception("Database transaction fail.")
         finally:
