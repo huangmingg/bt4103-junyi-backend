@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
 
-def cluster():
-    pass
+class ClusterService:
+    @staticmethod
+    def cluster(id):
+        pass
