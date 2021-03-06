@@ -12,7 +12,9 @@ app_directory = os.getcwd()
 
 def main():
     app = Flask(__name__)
-    CORS(app)
+    app.config['CORS_HEADERS'] = 'Content-Type'
+    CORS(app, resources={r"/v1/*": {"origins": "*"}})
+
     migrate_database(db_instance, os.path.join(app_directory, "migration"))
     setup_routing(app)
     app.run(port=8081)
