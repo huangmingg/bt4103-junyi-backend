@@ -36,3 +36,7 @@ class UserCache:
               'avg_hint_per_attempt',
               'avg_time_btw_problem'
               ]
+
+
+class Group:
+    fields = ['id', 'name']

@@ -23,5 +23,5 @@ class User(Resource):
 class UserList(Resource):
     @ns.marshal_list_with(user_read)
     def get(self):
-        res = UserService.get_users()
+        res = UserService.get_all_users()
         return res

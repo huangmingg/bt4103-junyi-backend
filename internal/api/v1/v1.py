@@ -1,6 +1,6 @@
 from flask_restful_swagger import swagger
 import logging
-from flask_restplus import Api, fields
+from flask_restplus import Api
 
 log = logging.getLogger(__name__)
 
