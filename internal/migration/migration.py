@@ -81,7 +81,7 @@ def _migrate_down(db_instance, migrated_files, migration_files):
 
 
 def _execute_migration_file(db_instance, file_path):
-    with open(file_path, 'r') as migration_file:
+    with open(file_path, 'r', encoding='utf8') as migration_file:
         sql = migration_file.read()
         res = db_instance.exec_transaction(sql)
         if not res:
