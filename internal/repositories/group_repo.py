@@ -1,4 +1,5 @@
 from internal.db.db import db_instance
+from internal.repositories.models import Group, parse
 
 
 def create_group(name):
@@ -11,7 +12,10 @@ def create_group(name):
     RETURNING id
     """
     res = db_instance.exec_transaction(query, has_return=True)
-    return res
+    if res:
+        return res[0][0]
+    else:
+        raise Exception("Failed to create group")
 
 
 def get_group(id):
@@ -21,4 +25,8 @@ def get_group(id):
 
 def get_groups():
     res = db_instance.fetch_rows("SELECT * FROM groups WHERE deleted_at IS NULL")
-    return res
+    if res:
+        res = [parse(Group.fields, row) for row in res]
+        return res
+    else:
+        return []
