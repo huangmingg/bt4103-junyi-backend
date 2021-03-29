@@ -40,3 +40,11 @@ class UserCache:
 
 class Group:
     fields = ['id', 'name']
+
+
+class GroupComputedStats:
+    fields = ['avg_accuracy', 'avg_exercises_attempted', 'avg_problems_attempted']
+
+
+class Path:
+    fields = ['id', 'group_id', 'cluster', 'content_id', 'rank', 'position', 'policy']

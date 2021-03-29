@@ -4,7 +4,7 @@ import logging
 from internal.api.v1.v1 import api_v1
 from internal.dto.groups import group_read, group_create
 from internal.dto.users import user_read
-from internal.dto.paths import path_read
+from internal.dto.paths import group_cluster_read
 from internal.services.group_service import GroupService
 logger = logging.getLogger(__name__)
 
@@ -33,10 +33,11 @@ class GroupStudent(Resource):
         return GroupService.get_group_users(id)
 
 
-@ns.route('/<id>/paths')
-@ns.param('id', 'group_id')
-class GroupPath(Resource):
-    @ns.marshal_list_with(path_read)
-    def get(self, id):
-        res = GroupService.get_group_paths(id)
+@ns.route('/<group_id>/cluster/<cluster_no>')
+@ns.param('group_id', 'group_id')
+@ns.param('cluster_no', 'cluster_no')
+class GroupCluster(Resource):
+    @ns.marshal_list_with(group_cluster_read)
+    def get(self, group_id, cluster_no):
+        res = GroupService.get_group_paths(group_id, cluster_no)
         return res

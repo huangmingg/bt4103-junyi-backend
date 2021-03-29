@@ -1,5 +1,5 @@
 from internal.db.db import db_instance
-
+from internal.repositories.models import parse, Path
 
 def create_recommendation(path_seq, group_id, cluster, policy, rank):
     pic = 'e0309575@u.nus.edu'
@@ -18,6 +18,7 @@ def create_recommendation(path_seq, group_id, cluster, policy, rank):
 
 def get_recommendation(group_id):
     res = db_instance.fetch_rows("SELECT * FROM recommend_cache WHERE group_id = %s AND deleted_at IS NULL", (group_id,))
+    res = [parse(Path.fields, row) for row in res]
     return res
 
 

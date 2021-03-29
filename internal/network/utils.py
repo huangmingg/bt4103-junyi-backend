@@ -18,7 +18,6 @@ def lower_bound_student_exercise_frequencies(log_problem, lower_bound=4):
     lower_bound : int
       The minimum number of problem_ids that a student must take in order to contribute to the mean accuracy of the exercise.
     """
-    print(log_problem)
     filtered_df = log_problem.groupby(['uuid', 'ucid'], sort=False)['upid'].count()
     filtered_df = filtered_df[filtered_df > lower_bound].reset_index().drop(columns=['upid'], axis=1)
     log_problem_filtered = log_problem.merge(filtered_df, left_on=['uuid', 'ucid'], right_on=['uuid', 'ucid'],
