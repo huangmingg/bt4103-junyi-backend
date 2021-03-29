@@ -10,5 +10,9 @@ group_create = api_v1.model('group_create', {
 group_read = api_v1.model('group_read', {
     'id': fields.String(required=True),
     'name': fields.String(required=True),
+    'no_students': fields.String(required=True),
+    'avg_accuracy': fields.String(required=True),
+    'avg_exercises_attempted': fields.String(required=True),
+    'avg_problems_attempted': fields.String(required=True),
 })
 

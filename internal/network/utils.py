@@ -1,4 +1,4 @@
-# Code retrieved from https://github.com/timmmlim/bt4103-junyi
+# Modified from https://github.com/timmmlim/bt4103-junyi
 
 import pandas as pd
 import numpy as np
@@ -26,20 +26,6 @@ def lower_bound_student_exercise_frequencies(log_problem, lower_bound=4):
 
 
 def create_graphing_dataframe(flp):
-    """
-    Using the flp, we want to create a list of src nodes: "from", a list of tgt nodes: "to", and a list of the subsequent individual scores to tgt: "individual_sum_score_to"
-
-    Parameters
-    ----------
-    flp: pd.DataFrame
-      The dataframe must contain uuid, ucid, ucid2, is_correct
-
-    Return
-    ------
-    user_to_content_student_performance : pd.DataFrame
-      uuid, ucid2, list of src nodes: "from", a list of tgt nodes: "to", and a list of the subsequent individual scores to tgt: "individual_sum_score_to"
-    """
-
     # create SUM student performance for each student on a particular exercise
     student_sum_performance = flp.groupby(['uuid', 'ucid'], sort=False)['is_correct'].sum().reset_index().rename(
         columns={'is_correct': 'sum_is_correct'})
@@ -49,16 +35,16 @@ def create_graphing_dataframe(flp):
                                                                                      right_on=['uuid', 'ucid'])
 
     # create the dataframe to create our graph
-    user_to_content_student_performance = flp_student_sum_performance.groupby(['uuid'], sort=False)['ucid2'].apply(
+    user_to_content_student_performance = flp_student_sum_performance.groupby(['uuid'], sort=False)['ucid'].apply(
         lambda x: x.tolist()).reset_index()
     user_to_content_student_performance['individual_sum_score'] = \
     flp_student_sum_performance.groupby(['uuid'], sort=False)['sum_is_correct'].apply(lambda x: x.tolist()).values
 
     # # need to remove students who only took one exercise, since they do not contribute to edge weight
     user_to_content_student_performance = user_to_content_student_performance[
-        user_to_content_student_performance['ucid2'].apply(lambda x: len(x) > 1)]
-    user_to_content_student_performance['from'] = user_to_content_student_performance['ucid2'].apply(lambda x: x[:-1])
-    user_to_content_student_performance['to'] = user_to_content_student_performance['ucid2'].apply(lambda x: x[1:])
+        user_to_content_student_performance['ucid'].apply(lambda x: len(x) > 1)]
+    user_to_content_student_performance['from'] = user_to_content_student_performance['ucid'].apply(lambda x: x[:-1])
+    user_to_content_student_performance['to'] = user_to_content_student_performance['ucid'].apply(lambda x: x[1:])
     user_to_content_student_performance['individual_sum_score_to'] = user_to_content_student_performance[
         'individual_sum_score'].apply(lambda x: x[1:])
     return user_to_content_student_performance[['uuid', 'from', 'to', 'individual_sum_score_to']]
@@ -82,7 +68,7 @@ def create_networkx_graph(user_to_content_student_performance):
         4. average_performance_tgt (Part B in diagram)
         5. final_average_performance (Part C in diagram)
     """
-    G = nx.DiGraph()
+    graph = nx.DiGraph()
     for index, row in user_to_content_student_performance.iterrows():
         user = row['uuid']
         from_list = row['from']
@@ -90,12 +76,12 @@ def create_networkx_graph(user_to_content_student_performance):
         individual_sum_score_to = row['individual_sum_score_to']
         # always check that the number
         for src, tgt, score in zip(from_list, to_list, individual_sum_score_to):
-            if G.has_edge(src, tgt):
-                G[src][tgt]['number_of_individual_students'] += 1
-                G[src][tgt]['sum_of_correct_problems'] += score
+            if graph.has_edge(src, tgt):
+                graph[src][tgt]['number_of_individual_students'] += 1
+                graph[src][tgt]['sum_of_correct_problems'] += score
             else:
-                G.add_edge(src, tgt, sum_of_correct_problems=score, number_of_individual_students=1)
-    return get_true_edge(G)
+                graph.add_edge(src, tgt, sum_of_correct_problems=score, number_of_individual_students=1)
+    return get_true_edge(graph)
 
 
 def get_true_edge(G):
@@ -134,13 +120,13 @@ def get_true_edge(G):
     return G
 
 
-def get_hubs_and_authorities(G):
+def get_hubs_and_authorities(graph):
     """
     Calculate the Hubs and Authority scores to identify potential starting and ending exercises
 
     Parameters
     ----------
-    G: NetworkXGraph
+    graph: NetworkXGraph
 
     Returns
     -------
@@ -148,7 +134,7 @@ def get_hubs_and_authorities(G):
       exercises are ranked according to the highest Hub score and the highest Authority score.
     """
     names = ["Authorities", "Hubs"]
-    hits = nx.hits(G,
+    hits = nx.hits(graph,
                    max_iter=200)  # https://stackoverflow.com/questions/63026282/error-power-iteration-failed-to-converge-within-100-iterations-when-i-tried-t
     all_measures = [hits[1], hits[0]]
     df = pd.concat([pd.Series(measure) for measure in all_measures], axis=1)
@@ -207,11 +193,11 @@ def calculate_path_weight(G, path, method='final_average_performance'):
     return weight
 
 
-def get_at_least_k_paths(G, top_k_hubs, top_k_authorities, k=3, verbose=True):
+def get_at_least_k_paths(graph, top_k_hubs, top_k_authorities, k=5, verbose=True):
     """
     Parameters
     ----------
-    G: NetworkXGraph
+    graph: NetworkXGraph
 
     top_k_hubs : list
       list of k potential starting exercises
@@ -238,22 +224,21 @@ def get_at_least_k_paths(G, top_k_hubs, top_k_authorities, k=3, verbose=True):
                     print(f'src: {hub} => tgt: {aut}')
                 try:
                     if verbose:
-                        print(f'Number of paths: {len(list(nx.all_shortest_paths(G, hub, aut)))}')
-                    for path in nx.all_shortest_paths(G, hub, aut):
+                        print(f'Number of paths: {len(list(nx.all_shortest_paths(graph, hub, aut)))}')
+                    for path in nx.all_shortest_paths(graph, hub, aut):
                         if verbose:
                             print(f"Available Paths: {path}")
                         # only add the paths that are of length 4 or more
                         if len(path) >= 4:
                             paths_to_return.append(
-                                (path, calculate_path_weight(G, path, method='final_average_performance')))
+                                (path, calculate_path_weight(graph, path, method='final_average_performance')))
 
                             # if we get the number of paths already, terminate
                             if len(paths_to_return) == k:
                                 return paths_to_return
                         if verbose:
                             for ex in path:
-                                print(f'Node: {ex}: {ucid_name_map[ex]}')
-                        print()
+                                print(f'Node: {ex}')
                 except nx.NetworkXNoPath:
                     if verbose:
                         print('No Path Available')
@@ -263,11 +248,10 @@ def get_at_least_k_paths(G, top_k_hubs, top_k_authorities, k=3, verbose=True):
         return paths_to_return
 
 
-def run_pipeline(log_problem, info_content, level4_ids, num_hubs_auth, lower_bound):
+def run_pipeline(log_problem, num_hubs_auth, lower_bound, policy):
     """
-    Run the entire process
-    1. Filter according to the selected exercise
-    2. Prune the network by removing students who took only a few problem_id in a exercise
+    Run the network algorithm
+    1. Prune the network by removing students who took only a few problem_id in a exercise
     3. Create the dataframe for graphing
     4. Create the graph
     5. get the potential starting and ending exercises
@@ -277,12 +261,6 @@ def run_pipeline(log_problem, info_content, level4_ids, num_hubs_auth, lower_bou
     log_problem: pd.DataFrame
       if recommending for individual clusters(student personas), just filter the log_problem for that specific group/persona
 
-    info_content: pd.DataFrame
-      if recommending for individual clusters(student personas), , this has to REMAIN AS THE ENTIRE info_content, since we need this to get the exercises that belongs to the user specified level4_id
-
-    level4_ids: list
-      The list of id. This is the original level4_ID , eg '364ml6jwsO0pO5l86JBpC+KFYvYr7mn7S9gVuhoBnUE='
-
     num_hubs_auth: int
       The parameter to control how many potential starting and ending exercises you want
 
@@ -291,7 +269,7 @@ def run_pipeline(log_problem, info_content, level4_ids, num_hubs_auth, lower_bou
 
     Returns
     -------
-    G: NetworkXGraph
+    graph: NetworkXGraph
 
     top_k_hubs : list
       list of k potential starting exercises
@@ -299,34 +277,38 @@ def run_pipeline(log_problem, info_content, level4_ids, num_hubs_auth, lower_bou
     top_k_authorities : list
       list of k potential ending exercises
     """
+
     flp = lower_bound_student_exercise_frequencies(log_problem, lower_bound=lower_bound)
     user_to_content_student_performance = create_graphing_dataframe(flp)
     graph = create_networkx_graph(user_to_content_student_performance)
-    df = get_hubs_and_authorities(G)
+    df = get_hubs_and_authorities(graph)
     top_k_hubs, top_k_authorities = get_top_k_hubs_and_authorities(df, k=num_hubs_auth)
     return graph, top_k_hubs, top_k_authorities
 
 
-def recommend_learning_paths(log_problem, info_content, level4_ids, num_paths=5, student_frequency_lower_bound=28, verbose=False):
+def create_recommend_learning_paths(logs
+                                    , num_exercises
+                                    , num_paths=5
+                                    , policy="popularity"
+                                    , student_frequency_lower_bound=11
+                                    , verbose=True
+                                    ):
     """
     Recommend the learning paths.
 
     Parameters
     ----------
-    log_problem: pd.DataFrame
-      if recommending for individual clusters(student personas), just filter the log_problem for that specific group/persona
+    logs: list
+     List of dicts as rows
 
-    info_content: pd.DataFrame
-      if recommending for individual clusters(student personas), , this has to REMAIN AS THE ENTIRE info_content, since we need this to get the exercises that belongs to the user specified level4_id
-
-    level4_ids: list
-      The list of id. This is the original level4_ID , eg '364ml6jwsO0pO5l86JBpC+KFYvYr7mn7S9gVuhoBnUE='
+    num_exercises: int
+      Maximum number of potential nodes
 
     num_paths: int
       The maximum number of paths that you want to recommend
 
-    num_hubs_auth: int
-      The parameter to control how many potential starting and ending exercises you want
+    policy: string
+      The type of edge weight policy to be computed - currently supports "popularity" and "performance"
 
     student_frequency_lower_bound: int
       The parameter to control the number of edges in the network by removing students who took less than lower_bound number of problem in an exercise.
@@ -339,13 +321,12 @@ def recommend_learning_paths(log_problem, info_content, level4_ids, num_paths=5,
     paths: list of tuple
       returns the list of recommend path so that we can sort according to the path_cost Eg [(path1, path1_cost), (path2, path2_cost)]
     """
-    graph, top_k_hubs, top_k_authorities = run_pipeline(log_problem,
-                                                    info_content,
-                                                    level4_ids,
-                                                    num_hubs_auth=min(10,
-                                                                      len(info_content['level4_id'].isin(level4_ids))),
-                                                    lower_bound=student_frequency_lower_bound,
-                                                    )
-    # the final_average_weights will be 0 if there is only one student who went from A to B
+    logs = pd.DataFrame(logs)
+    graph, top_k_hubs, top_k_authorities = run_pipeline(logs,
+                                                        num_hubs_auth=min(10, num_exercises),
+                                                        lower_bound=student_frequency_lower_bound,
+                                                        policy=policy
+                                                        )
     paths = get_at_least_k_paths(graph, top_k_hubs, top_k_authorities, k=num_paths, verbose=verbose)
+    print(paths)
     return paths

@@ -21,3 +21,4 @@ def get_users(user_list):
     res = db_instance.fetch_rows(query)
     res = [parse(User.fields, row) for row in res]
     return res
+
