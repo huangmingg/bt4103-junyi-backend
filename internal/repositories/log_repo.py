@@ -1,8 +1,11 @@
 from internal.db.db import db_instance
+from internal.repositories.models import parse, Log
 
 
 def get_logs_by_user(user_list):
-    res = db_instance.fetch_rows(f"SELECT * FROM logs WHERE ucid in ({user_list})")
+    user_list = ', '.join([f"({i})" for i in user_list])
+    res = db_instance.fetch_rows(f"SELECT * FROM logs WHERE uuid IN ({user_list}) AND deleted_at IS NULL")
+    res = [parse(Log.fields, row) for row in res]
     return res
 
 
@@ -18,6 +21,8 @@ def get_logs_by_module(module_list):
                 ON l.uuid = u.uuid
                 WHERE 
                 c.level3_id IN ({module_list})
+                AND
+                l.deleted_at IS NULL
                 ORDER BY l.attempt_timestamp
             """
     res = db_instance.fetch_rows(query)

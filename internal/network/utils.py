@@ -221,13 +221,13 @@ def get_at_least_k_paths(graph, top_k_hubs, top_k_authorities, k=5, verbose=True
         for aut in top_k_authorities.index:
             if hub != aut:
                 if verbose:
-                    print(f'src: {hub} => tgt: {aut}')
+                    logger.info(f'src: {hub} => tgt: {aut}')
                 try:
                     if verbose:
-                        print(f'Number of paths: {len(list(nx.all_shortest_paths(graph, hub, aut)))}')
+                        logger.info(f'Number of paths: {len(list(nx.all_shortest_paths(graph, hub, aut)))}')
                     for path in nx.all_shortest_paths(graph, hub, aut):
                         if verbose:
-                            print(f"Available Paths: {path}")
+                            logger.info(f"Available Paths: {path}")
                         # only add the paths that are of length 4 or more
                         if len(path) >= 4:
                             paths_to_return.append(
@@ -238,13 +238,13 @@ def get_at_least_k_paths(graph, top_k_hubs, top_k_authorities, k=5, verbose=True
                                 return paths_to_return
                         if verbose:
                             for ex in path:
-                                print(f'Node: {ex}')
+                                logger.info(f'Node: {ex}')
                 except nx.NetworkXNoPath:
                     if verbose:
-                        print('No Path Available')
+                        logger.info('No Path Available')
                     continue
                 if verbose:
-                    print('=' * 100)
+                    logger.info('=' * 100)
         return paths_to_return
 
 
@@ -328,5 +328,5 @@ def create_recommend_learning_paths(logs
                                                         policy=policy
                                                         )
     paths = get_at_least_k_paths(graph, top_k_hubs, top_k_authorities, k=num_paths, verbose=verbose)
-    print(paths)
+    logger.info(paths)
     return paths

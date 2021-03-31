@@ -4,6 +4,7 @@ from internal.repositories.group_modules_repo import create_group_modules
 from internal.repositories.user_repo import get_users
 from internal.services.recommend_service import RecommendService
 from internal.repositories.computed_cache_repo import get_group_average, filter_users_by_clusters, get_users_bin
+from internal.services.predict_service import PredictService
 
 
 class GroupService:

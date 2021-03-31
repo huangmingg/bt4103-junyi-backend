@@ -9,6 +9,10 @@ class Model:
     fields = ['id', 'created_at', 'updated_at', 'deleted_at', 'created_by', 'updated_by', 'deleted_by']
 
 
+class Content:
+    fields = ['id', 'name', 'difficulty', 'learning_stage', 'level2_id', 'level3_id', 'level4_id']
+
+
 class User:
     fields = ['id',
               'name',
@@ -48,3 +52,22 @@ class GroupComputedStats:
 
 class Path:
     fields = ['id', 'group_id', 'cluster', 'content_id', 'rank', 'position', 'policy']
+
+
+class Log:
+    fields = ['id',
+              'upid',
+              'uuid',
+              'ucid',
+              'attempt_timestamp',
+              'problem_number',
+              'exercise_problem_repeat_session',
+              'is_correct',
+              'total_sec_taken',
+              'total_attempt_cnt',
+              'used_hint_cnt',
+              'is_hint_used',
+              'is_downgrade',
+              'is_upgrade',
+              'user_level'
+              ]
