@@ -14,7 +14,7 @@ def get_logs_by_module(module_list):
                 FROM logs l
                 LEFT JOIN contents c 
                 ON l.ucid = c.id
-                LEFT JOIN cluster_cache u
+                LEFT JOIN algorithm_cache u
                 ON l.uuid = u.uuid
                 WHERE 
                 c.level3_id IN ({module_list})

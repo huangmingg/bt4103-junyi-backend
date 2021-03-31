@@ -3,7 +3,7 @@ from internal.repositories.group_enrollment_repo import create_enrollments, get_
 from internal.repositories.group_modules_repo import create_group_modules
 from internal.repositories.user_repo import get_users
 from internal.services.recommend_service import RecommendService
-from internal.repositories.computed_cache_repo import get_group_average, filter_users_by_clusters
+from internal.repositories.computed_cache_repo import get_group_average, filter_users_by_clusters, get_users_bin
 
 
 class GroupService:
@@ -38,5 +38,6 @@ class GroupService:
         paths = RecommendService.get_recommendation_path(group_id)
         users = filter_users_by_clusters(user_list, [cluster])
         stats = {**get_group_average([user['uuid'] for user in users]), 'no_students': len(users)}
-        output = {**stats, 'paths': paths}
+        predictions = get_users_bin(user_list)
+        output = {**stats, 'paths': paths, 'predictions': predictions}
         return output

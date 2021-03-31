@@ -1,8 +1,9 @@
-CREATE TABLE IF NOT EXISTS cluster_cache
+CREATE TABLE IF NOT EXISTS algorithm_cache
 (
     "id"                    BIGSERIAL PRIMARY KEY,
     "uuid"                  BIGSERIAL,
     "cluster"               SMALLINT,
+    "bin"                   SMALLINT,
     "created_by"            VARCHAR NOT NULL,
     "created_at"            TIMESTAMPTZ NOT NULL DEFAULT now(),
     "updated_by"            VARCHAR NULL,

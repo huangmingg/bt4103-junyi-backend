@@ -72,8 +72,8 @@ def _migrate_up(db_instance, migrated_files, migration_files):
             query = f"INSERT INTO migration_metadata VALUES ('{n}');"
             res = db_instance.exec_transaction(query)
             if not res:
-                logging.error(f"Failed to execute migration metadata insertion for {n}")
-    logging.info("migration files successfully executed")
+                logger.error(f"Failed to execute migration metadata insertion for {n}")
+    logger.info("migration files successfully executed")
 
 
 def _migrate_down(db_instance, migrated_files, migration_files):

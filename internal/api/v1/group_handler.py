@@ -14,12 +14,12 @@ ns = api_v1.namespace('group', description='Operations related to group.')
 @ns.route('/')
 class Group(Resource):
     @ns.expect(group_create)
-    @ns.marshal_with(group_create)
+    @api_v1.marshal_with(group_create)
     def post(self):
         body = request.get_json()
         GroupService.create_group(body['name'], body['modules'], body['users'])
 
-    @ns.marshal_list_with(group_read)
+    @api_v1.marshal_list_with(group_read)
     def get(self):
         res = GroupService.get_groups()
         return res
@@ -28,7 +28,7 @@ class Group(Resource):
 @ns.route('/<id>/students')
 @ns.param('id', 'group_id')
 class GroupStudent(Resource):
-    @ns.marshal_with(user_read)
+    @api_v1.marshal_with(user_read)
     def get(self, id):
         return GroupService.get_group_users(id)
 
@@ -37,7 +37,7 @@ class GroupStudent(Resource):
 @ns.param('group_id', 'group_id')
 @ns.param('cluster_no', 'cluster_no')
 class GroupCluster(Resource):
-    @ns.marshal_list_with(group_cluster_read)
+    @api_v1.marshal_list_with(group_cluster_read)
     def get(self, group_id, cluster_no):
         res = GroupService.get_group_paths(group_id, cluster_no)
         return res

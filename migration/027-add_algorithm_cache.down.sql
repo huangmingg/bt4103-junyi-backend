@@ -1,5 +1,5 @@
 UPDATE
-    cluster_cache
+    algorithm_cache
 SET
     "deleted_at" = NOW()
   , "deleted_by" = 'e0309575@u.nus.edu'

@@ -1,6 +1,7 @@
 from internal.db.db import db_instance
 from internal.repositories.models import parse, Path
 
+
 def create_recommendation(path_seq, group_id, cluster, policy, rank):
     pic = 'e0309575@u.nus.edu'
     parsed = [f"({group_id}, {cluster}, {path}, {rank}, {index + 1}, '{policy}', '{pic}', NOW(), '{pic}', NOW())" for index, path in enumerate(path_seq)]

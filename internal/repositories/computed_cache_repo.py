@@ -44,13 +44,13 @@ def filter_users_by_clusters(user_list, cluster_list):
     FROM
     computed_cache 
     LEFT JOIN
-    cluster_cache
+    algorithm_cache
     ON
-    computed_cache.uuid = cluster_cache.uuid
+    computed_cache.uuid = algorithm_cache.uuid
     WHERE 
     computed_cache.uuid IN ({user_list})
     AND
-    cluster_cache.cluster IN ({cluster_list}) 
+    algorithm_cache.cluster IN ({cluster_list}) 
     AND 
     computed_cache.deleted_at IS NULL
     """
@@ -58,6 +58,25 @@ def filter_users_by_clusters(user_list, cluster_list):
     res = [parse(UserCache.fields, row) for row in res]
     return res
 
+
+def get_users_bin(user_list):
+    user_list = ', '.join([f"({i})" for i in user_list])
+    query = f"""
+    SELECT
+        a.uuid, u.name, a.bin
+    FROM
+    users u
+    LEFT JOIN
+    algorithm_cache a
+    ON 
+    u.id = a.uuid
+    WHERE
+    a.uuid IN ({user_list})
+    AND
+    u.deleted_at IS NULL
+    """
+    res = db_instance.fetch_rows(query)
+    return res
 
 # TO-DO
 def create_user_cache(id):
