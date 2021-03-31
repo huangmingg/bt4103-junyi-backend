@@ -12,3 +12,4 @@ sklearn
 networkx
 shap==0.39.0
 xgboost
+matplotlib==3.4.1
