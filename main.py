@@ -6,7 +6,9 @@ from internal.api.v1.group_handler import ns as group_ns
 from internal.db.db import db_instance
 from internal.migration.migration import migrate_database
 import os
+import logging
 
+logging.basicConfig(level=logging.INFO)
 app_directory = os.getcwd()
 
 
