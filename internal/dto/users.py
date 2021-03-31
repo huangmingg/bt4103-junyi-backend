@@ -28,4 +28,5 @@ user_statistics_read = api_v1.inherit('user_statistics_read', user_read, {
     'no_downgrades': fields.String(),
     'avg_hint_per_attempt': fields.String(),
     'avg_time_btw_problem': fields.String(),
+    'html': fields.String(),
 })
