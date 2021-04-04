@@ -15,6 +15,8 @@ RESTful API web server designed using flask framework
 - Install dependencies ```pip install -r requirements.txt```
 <br>
 2. Modify the database configuration at ```/config/default.json```
+
+- Change the following configuration accordingly
 ```
   {
   "database": {
