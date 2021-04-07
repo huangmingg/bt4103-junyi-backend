@@ -59,6 +59,25 @@ def filter_users_by_clusters(user_list, cluster_list):
     return res
 
 
+def get_user_algorithm_cache(user):
+    query = f"""
+    SELECT
+        a.uuid, u.name, a.bin, a.cluster
+    FROM
+    users u
+    LEFT JOIN
+    algorithm_cache a
+    ON 
+    u.id = a.uuid
+    WHERE
+    a.uuid = {user}
+    AND
+    u.deleted_at IS NULL
+    """
+    res = db_instance.fetch_row(query)
+    return res
+
+
 def get_users_bin(user_list, cluster):
     user_list = ', '.join([f"({i})" for i in user_list])
     query = f"""

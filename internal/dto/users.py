@@ -30,4 +30,5 @@ user_statistics_read = api_v1.inherit('user_statistics_read', user_read, {
     'avg_time_btw_problem': fields.String(),
     'html': fields.String(),
     'bin': fields.String(),
+    'cluster': fields.String(),
 })
