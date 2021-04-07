@@ -45,6 +45,6 @@ class GroupService:
             return None
         else:
             stats = {**get_group_average([user['uuid'] for user in users]), 'no_students': len(users)}
-            predictions = get_users_bin(user_list)
+            predictions = get_users_bin(user_list, cluster)
             output = {**stats, 'paths': paths, 'predictions': predictions}
             return output

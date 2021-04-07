@@ -59,7 +59,7 @@ def filter_users_by_clusters(user_list, cluster_list):
     return res
 
 
-def get_users_bin(user_list):
+def get_users_bin(user_list, cluster):
     user_list = ', '.join([f"({i})" for i in user_list])
     query = f"""
     SELECT
@@ -72,6 +72,8 @@ def get_users_bin(user_list):
     u.id = a.uuid
     WHERE
     a.uuid IN ({user_list})
+    AND
+    a.cluster = {cluster}
     AND
     u.deleted_at IS NULL
     """
