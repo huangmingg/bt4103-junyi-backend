@@ -18,6 +18,8 @@ user_bin = api_v1.model('user_bin', {
 })
 
 group_cluster_read = api_v1.model('group_cluster_read', {
+    'group_id': fields.String(required=True),
+    'cluster': fields.String(required=True),
     'no_students': fields.String(required=True),
     'avg_accuracy': fields.String(required=True),
     'avg_exercises_attempted': fields.String(required=True),
