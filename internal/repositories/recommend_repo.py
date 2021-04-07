@@ -17,9 +17,9 @@ def create_recommendation(path_seq, group_id, cluster, policy, rank):
     return res
 
 
-def get_recommendation(group_id):
-    res = db_instance.fetch_rows("SELECT * FROM recommend_cache WHERE group_id = %s AND deleted_at IS NULL", (group_id,))
-    res = [parse(Path.fields, row) for row in res]
+def get_recommendation(group_id, cluster):
+    res = db_instance.fetch_rows("SELECT * FROM recommend_cache WHERE group_id = %s AND cluster = %s AND deleted_at IS NULL", (group_id, cluster,))
+    res = [parse(Path.fields, row) for row in res] if res else []
     return res
 
 

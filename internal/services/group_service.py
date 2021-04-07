@@ -38,13 +38,13 @@ class GroupService:
     @staticmethod
     def get_group_paths(group_id, cluster):
         user_list = get_enrollments(group_id)
-        paths = RecommendService.get_recommendation_path(group_id)
+        paths = RecommendService.get_recommendation_path(group_id, cluster)
         users = filter_users_by_clusters(user_list, [cluster])
         if not users:
             logger.info("No students in this cluster")
             return None
         else:
             stats = {**get_group_average([user['uuid'] for user in users]), 'no_students': len(users)}
-            predictions = get_users_bin(user_list)
+            predictions = get_users_bin(user_list, cluster)
             output = {**stats, 'paths': paths, 'predictions': predictions}
             return output

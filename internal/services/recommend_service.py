@@ -17,8 +17,8 @@ class RecommendService:
                         create_recommendation(path, group_id, cluster, method, index + 1)
 
     @staticmethod
-    def get_recommendation_path(group_id):
-        return get_recommendation(group_id)
+    def get_recommendation_path(group_id, cluster):
+        return get_recommendation(group_id, cluster)
 
     @staticmethod
     def save_recommendation_path(group_id, paths, policy):
