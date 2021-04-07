@@ -14,7 +14,7 @@ class UserService:
         user_bin = get_users_bin([id])[0]['bin']
         if user_bin:
             html, _ = PredictService.explain_prediction(int(id), user_bin)
-            return {**computed_cache, **user, 'html': html}
+            return {**computed_cache, **user, 'html': html, 'bin': user_bin}
         else:
             return {**computed_cache, **user}
 
