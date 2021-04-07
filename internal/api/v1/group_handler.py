@@ -17,7 +17,11 @@ class Group(Resource):
     @api_v1.marshal_with(group_create)
     def post(self):
         body = request.get_json()
-        GroupService.create_group(body['name'], body['modules'], body['users'])
+        if (not body['modules']) or (not body['users']) or (not body['name']):
+            logger.info("Missing parameters from request")
+        else:
+            GroupService.create_group(body['name'], body['modules'], body['users'])
+            return {'name': f"Group {body['name']} successfully created"}
 
     @api_v1.marshal_list_with(group_read)
     def get(self):

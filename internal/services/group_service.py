@@ -4,7 +4,9 @@ from internal.repositories.group_modules_repo import create_group_modules
 from internal.repositories.user_repo import get_users
 from internal.services.recommend_service import RecommendService
 from internal.repositories.computed_cache_repo import get_group_average, filter_users_by_clusters, get_users_bin
-from internal.services.predict_service import PredictService
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class GroupService:
@@ -38,7 +40,11 @@ class GroupService:
         user_list = get_enrollments(group_id)
         paths = RecommendService.get_recommendation_path(group_id)
         users = filter_users_by_clusters(user_list, [cluster])
-        stats = {**get_group_average([user['uuid'] for user in users]), 'no_students': len(users)}
-        predictions = get_users_bin(user_list)
-        output = {**stats, 'paths': paths, 'predictions': predictions}
-        return output
+        if not users:
+            logger.info("No students in this cluster")
+            return None
+        else:
+            stats = {**get_group_average([user['uuid'] for user in users]), 'no_students': len(users)}
+            predictions = get_users_bin(user_list)
+            output = {**stats, 'paths': paths, 'predictions': predictions}
+            return output
