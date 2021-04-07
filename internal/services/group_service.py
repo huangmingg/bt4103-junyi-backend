@@ -38,7 +38,7 @@ class GroupService:
     @staticmethod
     def get_group_paths(group_id, cluster):
         user_list = get_enrollments(group_id)
-        paths = RecommendService.get_recommendation_path(group_id)
+        paths = RecommendService.get_recommendation_path(group_id, cluster)
         users = filter_users_by_clusters(user_list, [cluster])
         if not users:
             logger.info("No students in this cluster")
