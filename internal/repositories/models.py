@@ -71,3 +71,7 @@ class Log:
               'is_upgrade',
               'user_level'
               ]
+
+
+class Cluster:
+    fields = ['id', 'name', 'description']

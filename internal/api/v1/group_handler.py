@@ -44,4 +44,7 @@ class GroupCluster(Resource):
     @api_v1.marshal_list_with(group_cluster_read)
     def get(self, group_id, cluster_no):
         res = GroupService.get_group_paths(group_id, cluster_no)
-        return {**res, 'group_id': group_id, 'cluster': cluster_no}
+        if res:
+            return {**res, 'group_id': group_id, 'cluster': cluster_no}
+        else:
+            return {'group_id': group_id, 'cluster': cluster_no}
