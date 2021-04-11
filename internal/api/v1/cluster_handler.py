@@ -29,4 +29,5 @@ class ClusterList(Resource):
     @ns.marshal_list_with(cluster_read)
     def get(self):
         res = ClusterService.get_clusters()
+        res = sorted(res, key=lambda x: x['id'])
         return res
