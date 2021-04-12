@@ -6,7 +6,7 @@ from internal.services.predict_service import PredictService
 class UserService:
 
     @staticmethod
-    def get_user(id):
+    def get_user(id, generate_shap=False):
         if not get_user_cache(id):
             create_user_cache(id)
         computed_cache = get_user_cache(id)
@@ -14,9 +14,11 @@ class UserService:
         user_algorithm_cache = get_user_algorithm_cache(id)
         user_bin = user_algorithm_cache['bin']
         user_cluster = user_algorithm_cache['cluster']
-        if user_bin:
+        if user_bin and generate_shap:
             html, _ = PredictService.explain_prediction(int(id), user_bin)
             return {**computed_cache, **user, 'html': html, 'bin': user_bin, 'cluster': user_cluster}
+        elif user_bin:
+            return {**computed_cache, **user, 'bin': user_bin, 'cluster': user_cluster}
         else:
             return {**computed_cache, **user, 'cluster': user_cluster}
 
