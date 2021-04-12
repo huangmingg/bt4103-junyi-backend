@@ -20,7 +20,7 @@ def get_logs_by_module(module_list):
                 LEFT JOIN algorithm_cache u
                 ON l.uuid = u.uuid
                 WHERE 
-                c.level3_id IN ({module_list})
+                c.level2_id IN ({module_list})
                 AND
                 l.deleted_at IS NULL
                 ORDER BY l.attempt_timestamp
